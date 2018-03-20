@@ -64,6 +64,10 @@ public class KafkaClusterTest {
         return clusterName + "-kafka";
     }
 
+    private static String kafkaStatefulSetName(String clusterName) {
+        return kafkaClusterName(clusterName);
+    }
+
     private static String kafkaPodName(String clusterName, int podId) {
         return kafkaClusterName(clusterName) + "-" + podId;
     }
@@ -76,13 +80,13 @@ public class KafkaClusterTest {
         return kafkaClusterName(clusterName) + "-metrics-config";
     }
 
-    private static String kafkaPVCName(String clusterName, int podId) {
-        return "data-" + kafkaClusterName(clusterName) + "-" + podId;
-    }
-
     // can be used as zookeeper stateful set or service names
     private static String zookeeperClusterName(String clusterName) {
         return clusterName + "-zookeeper";
+    }
+
+    private static String zookeeperStatefulSetName(String clusterName) {
+        return zookeeperClusterName(clusterName);
     }
 
     private static String zookeeperPodName(String clusterName, int podId) {
@@ -97,12 +101,16 @@ public class KafkaClusterTest {
         return zookeeperClusterName(clusterName) + "-metrics-config";
     }
 
-    private static String zookeeperPVCName(String clusterName, int podId) {
-        return "data-" + zookeeperClusterName(clusterName) + "-" + podId;
-    }
-
     private static String topicControllerDeploymentName(String clusterName) {
         return clusterName + "-topic-controller";
+    }
+
+    private static String zookeeperPVCName(String clusterName, int podId) {
+        return "data-" + zookeeperStatefulSetName(clusterName) + "-" + podId;
+    }
+
+    private static String kafkaPVCName(String clusterName, int podId) {
+        return "data-" + kafkaStatefulSetName(clusterName) + "-" + podId;
     }
 
     @BeforeClass
@@ -462,4 +470,5 @@ public class KafkaClusterTest {
         LOGGER.info("Waiting for creation {}", zookeeperMetricsConfigName);
         kubeClient.waitForResourceCreation(CM, zookeeperMetricsConfigName);
     }
+
 }
