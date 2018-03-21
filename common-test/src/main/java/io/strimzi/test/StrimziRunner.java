@@ -290,7 +290,7 @@ public class StrimziRunner extends BlockJUnit4ClassRunner {
                     LOGGER.info("Deleting kafka cluster '{}' after test per @KafkaCluster annotation on {}", cluster.name(), name(element));
                     // delete cm
                     KubernetesClient client = new DefaultKubernetesClient();
-                    client.configMaps().withName(cluster.name()).delete();
+                    client.configMaps().inNamespace(kubeClient().namespace()).withName(cluster.name()).delete();
                     client.close();
                     // wait for ss to go
                     kubeClient().waitForResourceDeletion("statefulset", zkStatefulSetName);
