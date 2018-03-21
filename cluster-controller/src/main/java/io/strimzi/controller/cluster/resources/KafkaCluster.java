@@ -214,7 +214,6 @@ public class KafkaCluster extends AbstractCluster {
             scaleDown = true;
         }
 
-
         if (!getLabelsWithName().equals(ss.getMetadata().getLabels()))    {
             log.info("Diff: Expected labels {}, actual labels {}", getLabelsWithName(), ss.getMetadata().getLabels());
             different = true;
