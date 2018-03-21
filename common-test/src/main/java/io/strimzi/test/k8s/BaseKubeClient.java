@@ -37,7 +37,7 @@ public abstract class BaseKubeClient<K extends BaseKubeClient<K>> implements Kub
 
     @Override
     public K deleteByName(String resourceType, String resourceName) {
-        Exec.exec(cmd(), DELETE, resourceType, resourceName);
+        Exec.exec(namespacedCommand(DELETE, resourceType, resourceName));
         return (K) this;
     }
 
