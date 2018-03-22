@@ -185,7 +185,7 @@ public class StrimziRunner extends BlockJUnit4ClassRunner {
         }
     }
 
-    protected KubeClient<?> kubeClient() {
+    protected KubeClient<?>     kubeClient() {
         return clusterResource().client();
     }
 
@@ -240,9 +240,7 @@ public class StrimziRunner extends BlockJUnit4ClassRunner {
                 protected void after() {
                     LOGGER.info("Deleting connect cluster '{}' after test per @ConnectCluster annotation on {}", cluster.name(), name(element));
                     // delete cm
-                    KubernetesClient client = new DefaultKubernetesClient();
-                    client.configMaps().withName(cluster.name()).delete();
-                    client.close();
+                    kubeClient().deleteContent(yaml);
                     // wait for ss to go
                     kubeClient().waitForResourceDeletion("deployment", deploymentName);
                 }
@@ -289,9 +287,7 @@ public class StrimziRunner extends BlockJUnit4ClassRunner {
                 protected void after() {
                     LOGGER.info("Deleting kafka cluster '{}' after test per @KafkaCluster annotation on {}", cluster.name(), name(element));
                     // delete cm
-                    KubernetesClient client = new DefaultKubernetesClient();
-                    client.configMaps().inNamespace(kubeClient().namespace()).withName(cluster.name()).delete();
-                    client.close();
+                    kubeClient().deleteContent(yaml);
                     // wait for ss to go
                     kubeClient().waitForResourceDeletion("statefulset", zkStatefulSetName);
                 }
